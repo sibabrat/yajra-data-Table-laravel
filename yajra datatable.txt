@@ -24,6 +24,10 @@ https://jquery.com/download (js)
 http://getbootstrap.com/getting-started/#download (.css)
 https://github.com/DataTables/DataTables/tree/master/media/images   (images except Sorting icons.psd )
 
+
+Make a folder src inside public and inside src make three files . 1-css, 2-js , 3-images. 
+Put the css files in css folder and js in js folder and images in images folder . 
+
 7 - write the code in controller 
 
 
