@@ -1,0 +1,162 @@
+
+
+1 - update the composer by using 
+composer require yajra/laravel-datatables-oracle:~6.0
+
+2- go to config/app 
+Yajra\Datatables\DatatablesServiceProvider::class,
+ update this in line no 150 
+
+3- now again in line no 205 update the class 
+'Datatables' => Yajra\Datatables\Datatables::class,
+
+4- now write the cmd code
+composer dump-autoload
+
+5 - again type after that 
+php artisan vendor:publish
+
+6 - download some js css and image files from the links 
+
+cdn.datatables.net/1.10.10/css/jquery.dataTables.css
+cdn.datatables.net/1.10.10/js/jquery.dataTables.js
+https://jquery.com/download (js)
+http://getbootstrap.com/getting-started/#download (.css)
+https://github.com/DataTables/DataTables/tree/master/media/images   (images except Sorting icons.psd )
+
+7 - write the code in controller 
+
+
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Http\controllers\controller;
+use DB;
+class StudentController extends Controller
+{
+
+    public function index(){
+        $students=DB::table('users')->get();
+        $students = DB::table('users')->paginate(5);
+        return view('student',compact('students'));
+
+
+
+    }
+}
+
+
+
+8 - write the code in routes 
+
+\<?php
+
+/*
+|--------------------------------------------------------------------------
+| Application Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register all of the routes for an application.
+| It's a breeze. Simply tell Laravel the URIs it should respond to
+| and give it the controller to call when that URI is requested.
+|
+*/
+
+Route::get('/', [
+    'uses' => 'StudentController@index',
+    'as' => '/viewStudent',
+
+]);
+
+
+
+9 - write the code in student.blade.php
+
+
+
+
+<html>
+<head>
+
+<title>Data Table</title>
+
+<link rel="stylesheet" href="{{URL::to('src/css/bootstrap.css')}}">
+<link rel="stylesheet" href="{{URL::to('src/css/jquery.dataTable.css')}}">
+<link rel="script" href="{{URL::to('src/js/jquery.dataTable.js')}}">
+<link rel="script" href="{{URL::to('src/css/jquery3.1.1.js')}}">
+</head>
+<style type="text/css">
+    .wrapper{
+        width: 75%;
+        margin: 0 auto;
+        background: #eee;
+        margin-top: 10px;
+    }
+
+</style>
+<body>
+
+<section class="panel panel-primary">
+
+    <div class="panel-heading">
+        <b>Student Info</b>
+    </div>
+    <div class="panel-body">
+        <table class="table table-hover table-bordered student">
+            <thead>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone No</th>
+            <th>Gender</th>
+            <th>Roll</th>
+            <th>Status </th>
+            </thead>
+
+             <tbody>
+
+             @foreach ($students as $student)
+
+                 <tr>
+                     <td>{{ $student->id }}</td>
+                     <td>{{ $student->first_name }}</td>
+                     <td>{{ $student->last_name }}</td>
+                     <td>{{ $student->email }}</td>
+                     <td>{{ $student->phone }}</td>
+                     <td>{{ $student->gender }}</td>
+                     <td>{{ $student->roll }}</td>
+                     <td>{{ $student->status }}</td>
+
+
+                     <td>
+                         <a href="/#/{{ $student->id }}/edit" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
+
+                         <a href="/#/{{ $student->id }}/edit" class="btn btn-danger pull-right" style="margin-right: 3px;">Delete</a>
+
+                     </td>
+                 </tr>
+
+             @endforeach
+
+
+             </tbody>
+
+        </table>
+        {{$students->links()}}
+    </div>
+</section>
+</body>
+
+<script type="text/javascript">
+
+</script>
+
+
+
+</html>
+
